@@ -8,12 +8,8 @@
 #    "requests>=2.32.3",
 #    "scikit-learn>=1.6.0",
 #    "seaborn>=0.13.2",
-#]
-# 
+#] 
 # ///
-
-
-
 
 import os
 import sys
@@ -167,22 +163,18 @@ def hierarchical_clustering(data, output_dir):
     plt.close()
     return hc_path
 
-# Function to save results to README.md
-def save_readme(content, output_dir):
+# Function to save results to README.md in the current directory
+def save_readme(content):
     try:
-        with open(os.path.join(output_dir, "README.md"), "w") as f:
+        with open("README.md", "w") as f:
             f.write(content)
-        print("README saved")
+        print("README saved in the current directory.")
     except Exception as e:
         print(f"Error saving README: {e}")
         sys.exit(1)
 
 # Function to analyze and generate output
 def analyze_and_generate_output(file_path):
-    base_name = os.path.splitext(os.path.basename(file_path))[0]
-    output_dir = os.path.join(".", base_name)
-    os.makedirs(output_dir, exist_ok=True)
-
     # Load data
     data = load_data(file_path)
     print("Data loaded")
@@ -194,9 +186,9 @@ def analyze_and_generate_output(file_path):
 
     # Generate visualizations and save file paths
     image_paths = {}
-    image_paths['correlation_matrix'] = generate_correlation_matrix(data, output_dir)
-    image_paths['dbscan_clusters'] = dbscan_clustering(data, output_dir)
-    image_paths['hierarchical_clustering'] = hierarchical_clustering(data, output_dir)
+    image_paths['correlation_matrix'] = generate_correlation_matrix(data, ".")
+    image_paths['dbscan_clusters'] = dbscan_clustering(data, ".")
+    image_paths['hierarchical_clustering'] = hierarchical_clustering(data, ".")
     print("Images created:\n", image_paths)
 
     # Send data to LLM for analysis and suggestions
@@ -222,8 +214,8 @@ def analyze_and_generate_output(file_path):
     # Get the AI-generated story
     narrative = get_ai_story(data_info['summary'], data_info['filename'], image_paths)
 
-    # Save the narrative to a README file
-    save_readme(narrative, output_dir)
+    # Save the narrative to README file in the current directory
+    save_readme(narrative)
 
 # Main function
 def main():
